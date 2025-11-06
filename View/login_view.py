@@ -14,11 +14,11 @@ class LoginView(ctk.CTkFrame):
         self.password=ctk.CTkEntry(r2,show='*',width=260); self.password.pack(side='left')
         ctk.CTkButton(self,text='Sign in',command=self._login, height=40).pack(pady=12)
     def _login(self):
-        role=self.app.auth.login(self.username.get().strip(), self.password.get().strip())
+        role=self.app.account_ctrl.login(self.username.get().strip(), self.password.get().strip())
         if role:
             self.app.current_user=self.username.get().strip()
             self.app.current_role=role
             if role=='admin': self.app.show_admin()
-            else: self.app.show_home()
+            else: self.app.show_student()
         else:
             messagebox.showerror('Login','Invalid credentials')

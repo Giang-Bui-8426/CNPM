@@ -1,23 +1,23 @@
 class Registration:
     __slots__ = ("__registrationID","__registrationStatus","__classID","__mssv")
-    def __init__(self,ID,classID,mssv,Status = "active"):
+    def __init__(self,ID,classID,mssv,status = "active"):
         self.__registrationID = ID
-        self.__registrationStatus = Status
+        self.__registrationStatus = status
         self.__classID = classID
         self.__mssv = mssv
     @property
-    def getRegistrationID(self):
+    def registrationID(self):
         return self.__registrationID
     @property
-    def getRegistrationStatus(self):
+    def status(self):
         return self.__registrationStatus
     @property
-    def getClassID(self):
+    def classID(self):
         return self.__classID
     @property
-    def getMssv(self):
+    def mssv(self):
         return self.__mssv
-    def setRegistrationStatus(self,looked = True):
+    def setRegistrationStatus(self,looked = "active"):
         self.__registrationStatus = looked
         return looked
     

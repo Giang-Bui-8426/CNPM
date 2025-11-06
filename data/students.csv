@@ -1,0 +1,5 @@
+mssv,password,fullname,role,email,address,major,completedCourse,debtID
+SV003,123456,Bui Truong Giang,student,buitruonggiang@gmail.com,Ho Chi Minh City,Information Technology,C015|C010,D002
+SV002,123456,Dao The Bao,student,thebaodao@gmail.com,Ho Chi Minh City,Information Technology,C001,D001
+fd ffdsa,123456,Bui Truong Gi,student,sdfdsaa@gmail.com,PY,CNTT,,D003
+AD001,admin123,Admin,admin,admin@ut.edu.vn,,,,

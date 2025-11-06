@@ -1,0 +1,5 @@
+courseID,courseName,credit,prereq
+C004,Software Technology,2,C001
+C003,Python Programming,3,
+C002,Databases,3,
+C001,Data Structures,3,C003

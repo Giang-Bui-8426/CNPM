@@ -1,18 +1,22 @@
 class DebtRecord:
     __slots__ = ("__DebtID","__Debt")
-    def __init__(self,DebtID,Debt):
-        self.__DebtID = DebtID
-        self.__Debt = Debt
+    def __init__(self,debtID,debt):
+        self.__DebtID = debtID
+        self.__Debt = debt
     @property
-    def getDebt(self):
+    def debt(self):
         return self.__Debt
     @property
-    def getDebtID(self):
+    def debtID(self):
         return self.__DebtID
     def setDebt(self,debt):
-        if debt < 0:
+        try:
+            debt = int(debt)
+            if debt < 0:
+                return False
+            self.__Debt = debt
+            return True
+        except ValueError:
             return False
-        self.__Debt = debt
-        return True
     
         

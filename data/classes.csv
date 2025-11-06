@@ -1,0 +1,5 @@
+classID,courseID,roomID,scheduleID,maxStudents,status
+L012,C002,LabA1,S001,30,open
+L013,C003,LabB2,S002,30,locked
+L014,C004,HallC3,S003,40,open
+L015,C004,HallA2,S004,40,open

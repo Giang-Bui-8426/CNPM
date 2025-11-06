@@ -1,45 +1,45 @@
 class CourseClass:
-    __slots__ = ("__classID","__courseID","__roomID","__maxStudent","__status","__schedule")
-    def __init__(self,classID,courseID,roomID,maxStudent,status,schedule):
+    __slots__ = ("__classID","__courseID","__roomID","__maxStudents","__status","__scheduleID","__student")
+    def __init__(self,classID,courseID,roomID,maxStudents,status,scheduleID,student=None):
         self.__classID = classID
         self.__courseID = courseID
         self.__roomID = roomID
-        self.__maxStudent = maxStudent
+        self.__maxStudents = maxStudents
         self.__status = status
-        self.__schedule = schedule
-        self.__student = []
+        self.__scheduleID = scheduleID
+        self.__student = list(student) if student else []
     @property
-    def getClassID(self):
+    def classID(self):
         return self.__classID
     @property
-    def getCourseID(self):
+    def courseID(self):
         return self.__courseID
     @property
-    def getRoomID(self):
+    def roomID(self):
         return self.__roomID
     def setRoomID(self,ID):
         self.__roomID = ID 
     @property
-    def getMaxStudent(self):
-        return self.__maxStudent
+    def maxStudents(self):
+        return self.__maxStudents
     @property
-    def getStatus(self):
+    def status(self):
         return self.__status
-    def setStatus(self,status = True):
+    def setStatus(self,status = "open"):
         self.__status = status
         return True
     @property
-    def getSchedule(self):
-        return self.__schedule
+    def scheduleID(self):
+        return self.__scheduleID
     @property
-    def getStudent(self):
+    def students(self):
         return self.__student
     @property
-    def getAmountStudent(self):
-        return len(self.__Student)
+    def amountStudent(self):
+        return len(self.__student)
     def addStudent(self,StudentID,add =True):
         if add:
-            self.__student.append(StudentID)
+            self.__student.extend(StudentID)
         else:
             if StudentID in self.__student:
                 self.__student.remove(StudentID)
@@ -47,4 +47,5 @@ class CourseClass:
         return True
     def setStudent(self,ListStudent):
         self.__student = ListStudent
+
     

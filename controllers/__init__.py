@@ -1,0 +1,3 @@
+import controllers.accountController
+import controllers.courseController
+import controllers.registerController

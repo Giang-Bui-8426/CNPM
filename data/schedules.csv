@@ -1,0 +1,5 @@
+scheduleID,dateStart,dateEnd,session,dayOfWeek
+S001,20/09/2025,20/12/2025,1,Tuesday
+S002,21/09/2025,21/12/2025,2,Wednesday
+S003,21/09/2025,21/12/2025,3,Friday
+S004,20/09/2025,20/12/2025,1,Monday
