@@ -2,8 +2,8 @@
 import customtkinter as ctk
 DAYS=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 class ScheduleView(ctk.CTkFrame):
-    def __init__(self, master, app):
-        super().__init__(master); self.app=app; self._build()
+    def __init__(self,app):
+        super().__init__(app); self.app=app; self._build()
     def _build(self):
         top=ctk.CTkFrame(self); top.pack(fill='x')
         ctk.CTkButton(top, text='← Back', width=100, command=self.app.show_student).pack(side='left', padx=8, pady=8)

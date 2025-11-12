@@ -1,5 +1,6 @@
 courseID,courseName,credit,prereq
-C004,Software Technology,2,C001
-C003,Python Programming,3,
-C002,Databases,3,
-C001,Data Structures,3,C003
+C002,Software Technology,3,
+C001,Python Language,3,
+C003,Programming Technique,3,C001
+C004,C++ Language,3,
+C005,Structure Data and Algorithm,3,C003

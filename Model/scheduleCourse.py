@@ -27,5 +27,4 @@ class ScheduleCourse:
         check2 =  min(datetime.strptime(scheduleOther.dateEnd,"%d/%m/%Y"),datetime.strptime(self.__dateEnd,"%d/%m/%Y"))
         day = self.__dayOfWeek == scheduleOther.dayOfWeek
         session = int(self.__session) == int(scheduleOther.session)
-        
         return (check1 <= check2 and day and session)
