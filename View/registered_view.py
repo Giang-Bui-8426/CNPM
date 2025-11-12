@@ -2,8 +2,8 @@
 import customtkinter as ctk
 from tkinter import ttk, messagebox
 class RegisteredCoursesView(ctk.CTkFrame):
-    def __init__(self, master, app):
-        super().__init__(master); self.app=app; self._build()
+    def __init__(self,app):
+        super().__init__(app); self.app=app; self._build()
     def _build(self):
         top=ctk.CTkFrame(self); top.pack(fill='x')
         ctk.CTkButton(top, text='← Back', width=100, command=self.app.show_student).pack(side='left', padx=8, pady=8)
@@ -30,9 +30,11 @@ class RegisteredCoursesView(ctk.CTkFrame):
         if not item: return
         vals=self.tree.item(item,'values')
         if col=='#6':
-            check,tmp = self.app.reg_ctrl.cancelRegister(self.app.current_user, vals[0])
-            if check:
-                messagebox.showinfo("inform","Cancel success")
-                self.refresh()
-            else:
-                messagebox.showwarning("inform",tmp)
+            confirm = messagebox.askokcancel("Cancel","Are you sure you want to cancel?")
+            if confirm:
+                check,tmp = self.app.reg_ctrl.cancelRegister(self.app.current_user, vals[0])
+                if check:
+                    messagebox.showinfo("inform","Cancel success")
+                    self.refresh()
+                else:
+                    messagebox.showwarning("inform",tmp)

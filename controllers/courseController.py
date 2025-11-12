@@ -3,8 +3,9 @@ from Model.course import Course
 from Model.scheduleCourse import ScheduleCourse
 from Model.courseClass import CourseClass
 
-def autoID(symbol,size):
+def autoID(symbol,size,bonus=0):
     id = ""
+    size = size+bonus
     if size > 100:
         id = f"{symbol}" + str(size)
     elif size > 10:
@@ -23,6 +24,11 @@ class CourseController:
         try:
             if courseID in self.courses:
                 return False,"Course already exist"
+            if courseID[0] != "C" or len(courseID[1:]) < 3 or not courseID[1:].isdigit():
+                return False,"Pleasant enter correct format of CourseID"
+            for pre in prerequisites:
+                if pre[0] != "C" or len(pre[1:]) < 3 or not pre[1:].isdigit():
+                    return False,"Pleasant enter correct format of CourseID at Prerequites"
             credit = int(credit)
             self.courses[courseID] = Course(courseID,courseName,prerequisites,credit)
             self.repo.save_courses()
@@ -45,6 +51,7 @@ class CourseController:
             check1 = datetime.strptime(start,"%d/%m/%Y")
             check2 = datetime.strptime(end,"%d/%m/%Y")
             if (check1 > check2): return False, "Invalid start and end dates"
+            
             day = day.strip().title()
             if day not in dayOfWeek:
                return False,"Day no validation" 
@@ -52,6 +59,10 @@ class CourseController:
             if 0 > session or session > 5:
                 return False,"Session no validation"
             scheduleID = autoID("S",len(self.repo.schedules))
+            i = 0
+            while (scheduleID in self.repo.schedules):
+                i +=1
+                scheduleID = autoID("S",len(self.repo.debts),i)
         except ValueError as e:
             return False,str(e)
         else: 
@@ -63,6 +74,8 @@ class CourseController:
         try:
             if classID in self.courseClasses:
                 return False,"classID already exists."
+            if classID[:2] != "CL" or len(classID[2:]) <3 or not classID[2:].isdigit():
+                return False,"Please enter correct format of classID" 
             for cl in self.repo.classes.values():
                 if cl.roomID == roomID:
                     if self.repo.schedules[cl.scheduleID] == sched:
@@ -100,10 +113,11 @@ class CourseController:
     def removeStudentOutClass(self,mssv,classID):
         if not self.courseClasses[classID].addStudent(mssv,False):
             return False,"Student no exist in class"
-        for reg in self.repo.regs:
-            if reg.mssv == mssv and reg.classID == classID:
-                reg.setRegistrationStatus("inactive")
-                break
+        check,tmp = self.repo.reg_ctrl.cancelRegister(mssv,classID)
+        if not check:
+            return False,tmp
+        self.repo.save_classes()
+        self.repo.save_regs()
         return True,"OK"
                 
                 

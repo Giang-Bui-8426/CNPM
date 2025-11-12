@@ -17,11 +17,11 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         ctk.set_appearance_mode('light'); ctk.set_default_color_theme('green')
-        self.title('Course Registration (MVC)'); self.geometry('1200x750')
-        self.repo = Repository(); self.repo.bootstrap()
+        self.title('Course Registration'); self.geometry('1200x750')
+        self.repo = Repository(); self.repo.load()
         self.read_data = ReadDataController(self.repo)
-        self.courses_manage = CourseController(self.repo)
         self.reg_ctrl = RegisterController(self.repo)
+        self.courses_manage = CourseController(self.repo)
         self.account_ctrl = AccountController(self.repo)
         self.current_user=None
         self.current_role=None
@@ -29,19 +29,19 @@ class App(ctk.CTk):
     def clear(self):
         for w in self.winfo_children(): w.destroy()
     def show_login(self):
-        self.clear(); LoginView(self, self)
+        self.clear(); LoginView(self)
     def show_student(self):
-        self.clear(); self.repo.load(); StudentView(self, self).pack(fill='both', expand=True)
+        self.clear(); StudentView(self).pack(fill='both', expand=True)
     def show_profile(self):
-        self.clear(); ProfileView(self, self).pack(fill='both', expand=True)
+        self.clear(); ProfileView(self).pack(fill='both', expand=True)
     def show_change_pass(self):
-        self.clear(); ChangePasswordView(self, self).pack(fill='both', expand=True)
+        self.clear(); ChangePasswordView(self).pack(fill='both', expand=True)
     def show_registered(self):
-        self.clear(); RegisteredCoursesView(self, self).pack(fill='both', expand=True)
+        self.clear(); RegisteredCoursesView(self).pack(fill='both', expand=True)
     def show_schedule(self):
-        self.clear(); ScheduleView(self, self).pack(fill='both', expand=True)
+        self.clear(); ScheduleView(self).pack(fill='both', expand=True)
     def show_admin(self):
-        self.clear(); self.repo.load(); AdminHome(self, self)
+        self.clear(); AdminHome(self)
     def sign_out(self):
         self.current_user=None
         self.current_role=None; self.show_login()

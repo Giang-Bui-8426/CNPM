@@ -3,8 +3,8 @@ import customtkinter as ctk
 
 
 class AdminHome(ctk.CTkFrame):
-    def __init__(self, master, app):
-        super().__init__(master)
+    def __init__(self,app):
+        super().__init__(app)
         self.app = app
         self.pack(fill='both', expand=True)
         self._build()
@@ -32,12 +32,12 @@ class AdminHome(ctk.CTkFrame):
             self.tree_course.heading(c, text=c)
             self.tree_course.column(c, width=160 if c != 'prereq' else 220, anchor='w')
         self.tree_course.pack(fill='both', expand=True, padx=6, pady=(0,6))
-        self.tree_course.bind('<<TreeviewSelect>>', self._on_course_select)
+        self.tree_course.bind('<<TreeviewSelect>>', self._clickCourse)
 
         cbtns = ctk.CTkFrame(left); cbtns.pack(fill='x', padx=6, pady=(0,8))
-        ctk.CTkButton(cbtns, text='Add Course', command=self._add_course_dialog).pack(side='left', padx=4)
-        ctk.CTkButton(cbtns, text='Delete Course', fg_color='#ef5350', command=self._delete_course).pack(side='left', padx=4)
-        ctk.CTkButton(cbtns, text='Reload', command=self._refresh_courses).pack(side='left', padx=4)
+        ctk.CTkButton(cbtns, text='Add Course', command=self._addCourse).pack(side='left', padx=4)
+        ctk.CTkButton(cbtns, text='Delete Course', fg_color='#ef5350', command=self._deleteCourse).pack(side='left', padx=4)
+        ctk.CTkButton(cbtns, text='Reload', command=self._refreshCourses).pack(side='left', padx=4)
 
         # section
         right = ctk.CTkFrame(upper); right.grid(row=0, column=1, sticky='nsew', padx=(8,0))
@@ -55,37 +55,36 @@ class AdminHome(ctk.CTkFrame):
             self.tree_class.column(c, width=120, anchor='w')
         self.tree_class.grid(row=1, column=0, sticky='nsew', padx=8, pady=(0,6))
         # khi chọn lớp -> nạp danh sách SV bên dưới
-        self.tree_class.bind('<<TreeviewSelect>>', self._on_class_select)
+        self.tree_class.bind('<<TreeviewSelect>>', self._clickClass)
 
         cbtns2 = ctk.CTkFrame(right); cbtns2.grid(row=2, column=0, sticky='w', padx=8, pady=(0,8))
-        ctk.CTkButton(cbtns2, text='Add Class', command=self._add_class_dialog).pack(side='left', padx=4)
-        ctk.CTkButton(cbtns2, text='Delete Class', fg_color='#ef5350', command=self._delete_class).pack(side='left', padx=4)
-        ctk.CTkButton(cbtns2, text='Lock/Unlock', command=self._toggle_class_status).pack(side='left', padx=4)
+        ctk.CTkButton(cbtns2, text='Add Class', command=self._addClass).pack(side='left', padx=4)
+        ctk.CTkButton(cbtns2, text='Delete Class', fg_color='#ef5350', command=self._deleteClass).pack(side='left', padx=4)
+        ctk.CTkButton(cbtns2, text='Lock/Unlock', command=self._clickLooked).pack(side='left', padx=4)
 
         lower = ctk.CTkFrame(self); lower.pack(fill='x', padx=8, pady=(0,8))
         lower.grid_columnconfigure(0, weight=1)
         lower.grid_columnconfigure(1, weight=1)
 
-        # Create Account
+        # Frame create account
         add_user = ctk.CTkFrame(lower); add_user.grid(row=0, column=0, sticky='nsew', padx=(0,8))
         ctk.CTkLabel(add_user, text='Create Account', text_color='#2e7d32',
                      font=ctk.CTkFont(size=18, weight='bold')).pack(pady=(8,6))
-        self.e_mssv = ctk.CTkEntry(add_user, placeholder_text='Enter student ID'); self.e_mssv.pack(fill='x', padx=6, pady=3)
+        self.e_mssv = ctk.CTkEntry(add_user, placeholder_text='Start with SV and the size of the following sequence must be greater than 3'); self.e_mssv.pack(fill='x', padx=6, pady=3)
         self.e_full = ctk.CTkEntry(add_user, placeholder_text='Enter fullname'); self.e_full.pack(fill='x', padx=6, pady=3)
-        self.e_pwd  = ctk.CTkEntry(add_user, placeholder_text='Enter password', show='*'); self.e_pwd.pack(fill='x', padx=6, pady=3)
+        self.e_pwd  = ctk.CTkEntry(add_user, placeholder_text='Enter password ( 6 <= pass size < 50)', show='*'); self.e_pwd.pack(fill='x', padx=6, pady=3)
         self.e_email= ctk.CTkEntry(add_user, placeholder_text='Enter email'); self.e_email.pack(fill='x', padx=6, pady=3)
         self.e_addr = ctk.CTkEntry(add_user, placeholder_text='Enter address'); self.e_addr.pack(fill='x', padx=6, pady=3)
         self.e_major= ctk.CTkEntry(add_user, placeholder_text='Enter major'); self.e_major.pack(fill='x', padx=6, pady=3)
-        self.e_pre = ctk.CTkEntry(add_user, placeholder_text='Enter C001 if only 1 , C000|C002 if 2 or more'); self.e_pre.pack(fill='x', padx=6, pady=3)
-        ctk.CTkButton(add_user, text='Confirm', command=self._create_student).pack(anchor='e', padx=6, pady=8)
+        self.completed = ctk.CTkEntry(add_user, placeholder_text='Enter C001 if only 1 or C000,C002 if 2 or more'); self.completed.pack(fill='x', padx=6, pady=3)
+        ctk.CTkButton(add_user, text='Confirm', command=self._createStudent).pack(anchor='e', padx=6, pady=8)
 
-        #Class Student List 
+        # Frame student
         stu_box = ctk.CTkFrame(lower); stu_box.grid(row=0, column=1, sticky='nsew', padx=(8,0))
         self.stu_title = ctk.CTkLabel(stu_box, text='Danh sách sinh viên của lớp : (chưa chọn)',
                                       font=ctk.CTkFont(size=18, weight='bold'))
         self.stu_title.pack(pady=(8,6), anchor='w')
 
-        # Treeview + scrollbar dọc
         tv_wrap = ctk.CTkFrame(stu_box); tv_wrap.pack(fill='both', expand=True, padx=6)
         self.tree_stu = ttk.Treeview(tv_wrap, columns=('studentID','name'), show='headings', height=6)
         self.tree_stu.heading('studentID', text='Student ID'); self.tree_stu.column('studentID', width=140, anchor='center')
@@ -96,33 +95,33 @@ class AdminHome(ctk.CTkFrame):
         yscroll.grid(row=0, column=1, sticky='ns')
         tv_wrap.grid_rowconfigure(0, weight=1); tv_wrap.grid_columnconfigure(0, weight=1)
 
-        # input + buttons
+        # input + buttons -> frame student
         stbtn = ctk.CTkFrame(stu_box); stbtn.pack(fill='x', pady=6, padx=6)
         self.e_stu = ctk.CTkEntry(stbtn, placeholder_text='Enter StudentID'); self.e_stu.pack(side='left', padx=5)
-        ctk.CTkButton(stbtn, text='Add Student', command=self._add_student_to_selected_class).pack(side='left', padx=5)
-        ctk.CTkButton(stbtn, text='Delete Student', fg_color='#ef5350', command=self._remove_student_from_selected_class).pack(side='left', padx=5)
+        ctk.CTkButton(stbtn, text='Add Student', command=self._addStudentInClass).pack(side='left', padx=5)
+        ctk.CTkButton(stbtn, text='Delete Student', fg_color='#ef5350', command=self._removeStudentOutClass).pack(side='left', padx=5)
 
         # initial load
-        self._refresh_courses()
-        self._refresh_classes_for(None)
-        self._refresh_students_for(None)
+        self._refreshCourses()
+        self._refreshClasses(None)
+        self._refreshStudents(None)
 
     # load courses {"courseID": cid,"name":name,"credit":credit,"prerequisites":", ".join(prereq)}
-    def _refresh_courses(self):
+    def _refreshCourses(self):
         self.tree_course.delete(*self.tree_course.get_children())
         for row in self.app.read_data.allCourses().values():
             self.tree_course.insert('', 'end', 
                                     values=(row["courseID"], row["name"], row["credit"], row["prerequisites"]))
     # bắt click course
-    def _on_course_select(self, _evt):
+    def _clickCourse(self, _evt):
         sel = self.tree_course.selection()
         course_id = self.tree_course.item(sel[0], 'values')[0] if sel else None
-        self._refresh_classes_for(course_id)
+        self._refreshClasses(course_id)
         # reset student list until a class is selected
-        self._refresh_students_for(None)
+        self._refreshStudents(None)
 
     # load class khi chọn lớp
-    def _refresh_classes_for(self, course_id):
+    def _refreshClasses(self, course_id):
         self.tree_class.delete(*self.tree_class.get_children())
         if not course_id:
             self.class_title.configure(text='Classes (select a course)')
@@ -134,13 +133,13 @@ class AdminHome(ctk.CTkFrame):
                 row["dateStart"], row["dateEnd"], row["maxStudents"], row["status"]
             ))
     # bắt click chọn course
-    def _on_class_select(self, _evt):
+    def _clickClass(self,_evt):
         sel = self.tree_class.selection()
         class_id = self.tree_class.item(sel[0], 'values')[0] if sel else None
-        self._refresh_students_for(class_id)
+        self._refreshStudents(class_id)
         
     # load student
-    def _refresh_students_for(self, class_id):
+    def _refreshStudents(self, class_id):
         if not class_id:
             return
         for i in self.tree_stu.get_children():
@@ -153,22 +152,32 @@ class AdminHome(ctk.CTkFrame):
             self.tree_stu.insert('', 'end', values=(st[0], st[1]))
 
 
-    def _add_course_dialog(self):
-        win = ctk.CTkToplevel(self); win.title('Add Course'); win.geometry('420x280')
-        def row(lbl):
+    def _addCourse(self):
+        win = ctk.CTkToplevel(self); win.title('Add Course'); win.geometry('720x280')
+        
+        win.transient(self)
+        win.grab_set()
+        
+        def row(lbl,note=''):
             fr=ctk.CTkFrame(win); fr.pack(fill='x', padx=12, pady=6)
             ctk.CTkLabel(fr, text=lbl, width=120).pack(side='left')
-            e=ctk.CTkEntry(fr); e.pack(side='left', fill='x', expand=True); return e
-        e_id=row('Course ID'); e_name=row('Course Name'); e_cr=row('Credits'); e_pr=row('Prerequisites')
+            e=ctk.CTkEntry(fr,placeholder_text=note); e.pack(side='left', fill='x', expand=True); return e
+        e_id=row('Course ID','Start with C and the number sequence must be greater than 3. Example: C003') 
+        e_name=row('Course Name','Enter course name'); e_cr=row('Credits','Enter number credit')
+        e_pr=row('Prerequisites','Enter courseID if there are 2 or more, use , to separate (eg: C003, C002)')
         def add():
             cid=e_id.get().strip(); name=e_name.get().strip(); cr=e_cr.get().strip(); pr=e_pr.get().strip()
+            if not (cid and name and cr):
+                messagebox.showerror("Add Course","Please fill in all information in the field.")
+                return
             check,tmp = self.app.courses_manage.addCourse(cid,name,[p for p in pr.split(',') if p], cr)
             if not check:
-                messagebox.showerror('Add',tmp); return
-            self._refresh_courses(); win.destroy()
+                messagebox.showerror('Add Course',tmp); return
+            messagebox.showinfo('Add Course','Add course successively')
+            self._refreshCourses(); win.destroy()
         ctk.CTkButton(win, text='Create', command=add).pack(pady=8)
 
-    def _delete_course(self):
+    def _deleteCourse(self):
         sel = self.tree_course.selection()
         if not sel: return
         cid = self.tree_course.item(sel[0],'values')[0]
@@ -176,26 +185,34 @@ class AdminHome(ctk.CTkFrame):
             messagebox.showerror('Delete','Cannot delete course because class is open'); return
         if not self.app.courses_manage.removeCourse(cid):
             messagebox.showerror("Delete","CourseID no exists")
-        self._refresh_courses()
+        self._refreshCourses()
 
-    def _add_class_dialog(self):
+    def _addClass(self):
         sel = self.tree_course.selection()
         if not sel:
             messagebox.showwarning('Add Class','Select a course first'); return
         course_id = self.tree_course.item(sel[0],'values')[0]
 
-        win = ctk.CTkToplevel(self); win.title(f'Add Class for {course_id}'); win.geometry('520x420')
-        def row(lbl):
+        win = ctk.CTkToplevel(self); win.title(f'Add Class for {course_id}'); win.geometry('720x420')
+        win.transient(self)
+        win.grab_set()
+        
+        def row(lbl,note=''):
             fr=ctk.CTkFrame(win); fr.pack(fill='x', padx=12, pady=6)
             ctk.CTkLabel(fr, text=lbl, width=160).pack(side='left')
-            e=ctk.CTkEntry(fr); e.pack(side='left', fill='x', expand=True); return e
-        e_id=row('Class ID'); e_room=row('Room ID'); e_day=row('DayOfWeek (Mon..Sun)')
-        e_sess=row('Session (1..4)'); e_start=row('Start Date (dd/mm/yyyy)'); e_end=row('End Date (dd/mm/yyyy)')
-        e_max=row('Max Students')
+            e=ctk.CTkEntry(fr,placeholder_text=note); e.pack(side='left', fill='x', expand=True); return e
+        e_id=row('Class ID',"Start with CL and the number sequence must be greater than 3. Example: CL003")
+        e_room=row('Room ID',"Start with R"); e_day=row('DayOfWeek','Enter (Monday, Thursday,...)')
+        e_sess=row('Session','Enter 1-4'); e_start=row('Start Date (dd/mm/yyyy)','Enter in required format Example: 12/12/2025')
+        e_end=row('End Date (dd/mm/yyyy)','Enter in required format Example: 12/12/2025')
+        e_max=row('Max Students','Enter number')
 
         def add():
             cid=e_id.get().strip(); room=e_room.get().strip(); day=e_day.get().strip()
             sess=e_sess.get().strip(); st=e_start.get().strip(); en=e_end.get().strip(); m=e_max.get().strip()
+            if not (cid and room and day and sess and st and en and m):
+                messagebox.showerror("Add Course","Please fill in all information in the field.")
+                return
             check,sched = self.app.courses_manage.addSchedule(st, en, sess, day)
             if not check:
                 messagebox.showerror("Schedule",sched); return
@@ -203,10 +220,10 @@ class AdminHome(ctk.CTkFrame):
             if not checkC:
                 messagebox.showerror('Add',tmp); return
             messagebox.showinfo("","Add class successively")
-            self._refresh_classes_for(course_id); win.destroy()
+            self._refreshClasses(course_id); win.destroy()
         ctk.CTkButton(win, text='Create', command=add).pack(pady=8)
 
-    def _delete_class(self):
+    def _deleteClass(self):
         selc = self.tree_class.selection(); selco= self.tree_course.selection()
         if not selc or not selco: return
         cid = self.tree_class.item(selc[0],'values')[0]
@@ -215,18 +232,18 @@ class AdminHome(ctk.CTkFrame):
         if not check:
             messagebox.showwarning("delete class",tmp)
             return
-        self._refresh_classes_for(course_id)
+        self._refreshClasses(course_id)
 
     # button trạng thái lớp
-    def _toggle_class_status(self):
+    def _clickLooked(self):
         selc = self.tree_class.selection(); 
         cid = self.tree_class.item(selc[0],'values')[0]
         selco = self.tree_course.selection()
         clid = self.tree_course.item(selco[0],'values')[0]
         self.app.courses_manage.lookedStatus(cid)
-        self._refresh_classes_for(clid)
+        self._refreshClasses(clid)
 
-    def _add_student_to_selected_class(self):
+    def _addStudentInClass(self):
         sel = self.tree_class.selection()
         if not sel:
             messagebox.showwarning('Add Student','Please select class'); return
@@ -234,12 +251,14 @@ class AdminHome(ctk.CTkFrame):
         mssv = self.e_stu.get().strip()
         if not mssv:
             messagebox.showwarning('Add Student','Enter studentID'); return
-
-        check,tmp = self.app.reg_ctrl.register(mssv, class_id)
+        
+        check,tmp = self.app.reg_ctrl.register(mssv, class_id,True)
         if not check: messagebox.showerror('Add Student', tmp); return
-        self._refresh_students_for(class_id)
+        self.e_stu.delete(0, 'end')
+        messagebox.showinfo("Add Student",'Add Student Successively')
+        self._refreshStudents(class_id)
 
-    def _remove_student_from_selected_class(self):
+    def _removeStudentOutClass(self):
         sel = self.tree_class.selection()
         if not sel:
             messagebox.showwarning('Delete Student','Please select class'); return
@@ -250,24 +269,25 @@ class AdminHome(ctk.CTkFrame):
             messagebox.showwarning('Delete Student','Please select student'); return
         mssv = self.tree_stu.item(sel_stu[0], 'values')[0]
 
-        # nếu repo có hủy đăng ký/hàm tương tự thì gọi, ở đây demo xoá mềm khỏi regs
-        check,tmp = self.app.courses_manage.removeStudentOutClass(mssv,class_id)
+        check,tmp = self.app.reg_ctrl.cancelRegister(mssv,class_id,True)
         if not check:
             messagebox.showwarning("Remove register",tmp)
             return
-        self._refresh_students_for(class_id)
+        messagebox.showinfo("Remove","Kick students successively")
+        self._refreshStudents(class_id)
 
-    def _create_student(self):
+    def _createStudent(self):
         mssv = self.e_mssv.get().strip()
         Pass = self.e_pwd.get().strip()
         full=self.e_full.get().strip(); email=self.e_email.get().strip()
         addr=self.e_addr.get().strip(); major=self.e_major.get().strip()
+        comp = list(self.completed.get().strip().split(","))
         if not mssv or not full or not email or not addr or not major:
             messagebox.showerror('Create Student','Please enter complete information'); return
-        check,tmp = self.app.account_ctrl.createAccount(mssv,Pass,full,email,addr,major)
+        check,tmp = self.app.account_ctrl.createAccount(mssv,Pass,full,email,addr,major,comp)
         if not check:
             messagebox.showerror("Create Account",tmp)
             return
         messagebox.showinfo('Create Student', 'Account created successfully')
-        for e in [self.e_mssv,self.e_pwd,self.e_full,self.e_email,self.e_addr,self.e_major,self.e_pre]:
+        for e in [self.e_mssv,self.e_pwd,self.e_full,self.e_email,self.e_addr,self.e_major,self.completed]:
             e.delete(0,'end')

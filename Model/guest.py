@@ -1,5 +1,3 @@
-import re
-from dataclasses import dataclass
 def transferText(text):
     i = 1
     if text:
@@ -30,8 +28,6 @@ class Guest:
     def userName(self):
         return self.__username
     def setUser(self,newUser):
-        if len(newUser) < 6 or len(newUser) > 50 or re.search(r'[^A-Za-z0-9 ]',newUser):
-            return False
         self.__username = newUser
         return True
     @property

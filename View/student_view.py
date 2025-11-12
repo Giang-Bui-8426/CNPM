@@ -4,8 +4,8 @@ import customtkinter as ctk
 import re
 
 class StudentView(ctk.CTkFrame):
-    def __init__(self, master, app):
-        super().__init__(master); self.app=app
+    def __init__(self,app):
+        super().__init__(app); self.app=app
         self.grid_rowconfigure(0, weight=1); self.grid_columnconfigure(1, weight=1)
         self._build()
 
@@ -13,7 +13,7 @@ class StudentView(ctk.CTkFrame):
         sidebar = ctk.CTkFrame(self, width=220)
         sidebar.grid(row=0, column=0, sticky='nsw', padx=(8,0), pady=8)
         sidebar.grid_propagate(False)
-
+        #Frame right
         ctk.CTkLabel(sidebar, text=self.app.read_data.student_profile(self.app.current_user)["name"], font=ctk.CTkFont(size=18, weight='bold')).pack(pady=(12,8))
         ctk.CTkButton(sidebar, text='Student profile',  command=self.app.show_profile).pack(fill='x', padx=12, pady=6)
         ctk.CTkButton(sidebar, text='Change Password', command=self.app.show_change_pass).pack(fill='x', padx=12, pady=6)
@@ -28,7 +28,7 @@ class StudentView(ctk.CTkFrame):
         ctk.CTkLabel(main, text='Course Register System',
                      font=ctk.CTkFont(size=22, weight='bold')).grid(row=0, column=0, columnspan=3, pady=(6,4))
 
-        # Search row + course table
+        # Frame Courses
         area = ctk.CTkFrame(main); area.grid(row=1, column=0, columnspan=2, sticky='nsew', padx=(8,6), pady=6)
         area.grid_columnconfigure(1, weight=1)
 
@@ -45,7 +45,7 @@ class StudentView(ctk.CTkFrame):
         self.tree.grid(row=1, column=0, columnspan=3, sticky='nsew', padx=8, pady=(2,8))
         self.tree.bind('<Button-1>', self._click)
 
-        ## Frame class
+        ## Frame classes
         right = ctk.CTkFrame(main); right.grid(row=1, column=2, sticky='ns', padx=(0,8), pady=6)
         ctk.CTkLabel(right, text='Class', fg_color='#e53935', text_color='white',
                      corner_radius=8, width=240).pack(padx=6, pady=(4,6))

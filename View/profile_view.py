@@ -2,8 +2,8 @@
 import customtkinter as ctk
 from tkinter import messagebox
 class ProfileView(ctk.CTkFrame):
-    def __init__(self, master, app):
-        super().__init__(master); self.app=app; self._build()
+    def __init__(self,app):
+        super().__init__(app); self.app=app; self._build()
     def _build(self):
         top=ctk.CTkFrame(self); top.pack(fill='x')
         ctk.CTkButton(top, text='← Back', width=100, command=self.app.show_student).pack(side='left', padx=8, pady=8)
@@ -20,14 +20,14 @@ class ProfileView(ctk.CTkFrame):
         row('Student ID','mssv',True); row('Full Name','name'); row('Email','email')
         row('Major','major'); row('Address','address')
         def save():
-            check,error = self.app.account_ctrl.updateProfile(self.app.current_user,
-                name=self.entries['name'].get().strip(),
-                email=self.entries['email'].get().strip(),
-                major=self.entries['major'].get().strip(),
-                address=self.entries['address'].get().strip(),
-            )
+            name=self.entries['name'].get().strip()
+            email=self.entries['email'].get().strip()
+            major=self.entries['major'].get().strip()
+            address=self.entries['address'].get().strip()
+            check,error = self.app.account_ctrl.updateProfile(self.app.current_user,name,email,major,address)
             if not check:
                 messagebox.showwarning('Profile',error)
             else:
-                messagebox.showinfo('Profile','Saved success')
+                messagebox.showinfo('Profile','Change information successfully')
+            self.app.show_profile()
         ctk.CTkButton(self, text='Save', command=save).pack(pady=6)
