@@ -2,8 +2,8 @@
 import customtkinter as ctk
 from tkinter import messagebox
 class ChangePasswordView(ctk.CTkFrame):
-    def __init__(self, master, app):
-        super().__init__(master); self.app=app; self._build()
+    def __init__(self,app):
+        super().__init__(app); self.app=app; self._build()
     def _build(self):
         top=ctk.CTkFrame(self); top.pack(fill='x')
         ctk.CTkButton(top, text='← Back', width=100, command=self.app.show_student).pack(side='left', padx=8, pady=8)
@@ -15,8 +15,12 @@ class ChangePasswordView(ctk.CTkFrame):
         e_old=row('Old Password'); e_new=row('New Password'); e_cf=row('Confirm Password')
         def change():
             if e_new.get()!=e_cf.get(): messagebox.showwarning('Change','Confirm mismatch'); return
-            check,tmp = self.app.account_ctrl.changePass(self.app.current_user,e_new.get(),e_old.get())
-            if not check:
-                messagebox.showerror('Change',tmp); return
-            messagebox.showinfo('Change','Changed successfully')
+            confirm = messagebox.askokcancel('Change Password',"Are you sure you want to change your password?")
+            if confirm:
+                check,tmp = self.app.account_ctrl.changePass(self.app.current_user,e_new.get(),e_old.get())
+                if not check:
+                    messagebox.showerror('Change',tmp); return
+                e_old.delete(0, 'end'); e_new.delete(0, 'end'); e_cf.delete(0, 'end')
+                messagebox.showinfo('Change','Changed successfully')
+                
         ctk.CTkButton(self, text='Change', height=40, command=change).pack(pady=8)

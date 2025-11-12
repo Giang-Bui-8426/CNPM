@@ -39,7 +39,10 @@ class CourseClass:
         return len(self.__student)
     def addStudent(self,StudentID,add =True):
         if add:
-            self.__student.extend(StudentID)
+            if isinstance(StudentID,list):
+                self.__student.extend(StudentID)
+            else:
+                self.__student.append(StudentID)
         else:
             if StudentID in self.__student:
                 self.__student.remove(StudentID)

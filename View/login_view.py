@@ -2,8 +2,8 @@
 import customtkinter as ctk
 from tkinter import messagebox
 class LoginView(ctk.CTkFrame):
-    def __init__(self, master, app): # master dùng để làm tham số chứa Frame , app điều khiển luồng 
-        super().__init__(master); self.app=app
+    def __init__(self,app): # master dùng để làm tham số chứa Frame , app điều khiển luồng 
+        super().__init__(app); self.app=app
         self.pack(fill='both', expand=True); self._build()
     def _build(self):
         ctk.CTkLabel(self, text='Course Registration', font=ctk.CTkFont(size=26, weight='bold')).pack(pady=(40,10))
@@ -21,4 +21,4 @@ class LoginView(ctk.CTkFrame):
             if role=='admin': self.app.show_admin()
             else: self.app.show_student()
         else:
-            messagebox.showerror('Login','Invalid credentials')
+            messagebox.showerror('Login','Invalid login information')
