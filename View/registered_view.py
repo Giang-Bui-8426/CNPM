@@ -20,7 +20,7 @@ class RegisteredCoursesView(ctk.CTkFrame):
         self.tree.delete(*self.tree.get_children())
         rows,total = self.app.read_data.listRegistered(self.app.current_user)
         for r in rows: 
-            self.tree.insert('', 'end', values=(r[0], r[1], r[2], r[3], r[4], 'Cancel'))
+            self.tree.insert('', 'end', values=(r[0], r[1], r[2], r[3], r[4], '❌ Cancel'))
         self.lbl.configure(text=f'Total credits: {total}')
         debt = self.app.reg_ctrl.recalc_debt(self.app.current_user)
         self.debt_lbl.configure(text=f'Debt: {debt:,} VND')

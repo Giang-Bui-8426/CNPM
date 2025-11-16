@@ -4,3 +4,8 @@ C001,Python Language,3,
 C003,Programming Technique,3,C001
 C004,C++ Language,3,
 C005,Structure Data and Algorithm,3,C003
+C123,Disjointed structure,3,
+C0022,Statistical probability,3,
+C012,Embedded system,3,
+C025,Philosophy,10,
+C035,Machine Learning,15,
