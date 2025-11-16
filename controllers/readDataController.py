@@ -73,6 +73,8 @@ class ReadDataController:
     
     #return type : dict -> information class
     def getClass(self, class_id):
+        if class_id not in self.repo.classes:
+            return ""
         cl = self.repo.classes[class_id]
         sch = self.repo.schedules[cl.scheduleID]
         day = sch.dayOfWeek

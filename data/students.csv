@@ -1,5 +1,5 @@
 mssv,password,fullname,role,email,address,major,completedCourse,debtID
-SV1234,123456,Bùi Trường Giang,student,gt24626@gmail.com,Phú Yên,Information Technology,C001,D000
+SV1234,123123,Bùi Trường Gian,student,gt24626@gmail.com,Phú Yên,Information Technology,C001,D000
 SV1235,123456,Đào Thế Bảo,student,thebaodao@gmail.com,Hồ Chí Minh,Information Technology,C001|C003,D001
 SV12346,123456,Nguyễn Quỳnh Phiếu,student,quynhphieu@gmail.com,HCM,Information Technology,,D002
 admin123,123456,Admin,admin,admin@ut.edu.vn,,,,
